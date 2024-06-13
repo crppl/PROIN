@@ -1,0 +1,188 @@
+#def evThreads(event):
+#    if cbThreads.get() != "n/a":
+#        core = ["n/a"]
+#        nOfThreads = int(cbThreads.get())
+#        for i in cor[2:]:
+#            if int(i) <= nOfThreads:
+#                core.append(i)
+#        cbCores['value'] = core
+#    else:
+#        cbCores['value'] = cor
+
+### TAK, ABY nOfThreads >= nOfCores
+#def evCores(event):
+#    thread = ["n/a"]
+#    if cbCores.get() != "n/a":
+#        nOfCores = int(cbCores.get())
+#        for i in cor[2:]:
+#            if int(i) >= nOfCores:
+#                thread.append(i)
+#    else:
+#        thread.extend(dm.getCPUThreads())
+#    cbThreads['value'] = thread
+
+
+# słaba wersja ze średnimi danymi
+    def prepareParams(this, dump):
+        paaa = [0 for x in this.dum.columns]
+        paaa[1] = this.baseDisplay
+        paaa[2] = this.baseWarranty
+        for i in range(0, len(paaa)):
+            for j in range(0, dump.shape[1]):
+                if dump.columns[j] == this.dum.columns[i]:
+                    paaa[i] = dump.iloc[0, j]
+                    break
+        return pd.DataFrame([paaa], columns=this.dum.columns)
+
+
+
+
+ # wersja ze skrobaniem danych
+    #def prepareParams(this, dump):
+    #    for i in dump.columns:
+    #        if "n/a" not in i:
+    #            for j in this.dum.columns:
+    #                if j == i:
+    #                    for k in dump.index:
+    #                        this.dum = this.dum.drop(this.dum[ this.dum[j] != dump.loc[k, i] ].index)
+    #                    break
+
+
+
+
+
+'''
+def evModel(event):
+    global aktModel
+    if cbModel.get() != aktModel:
+        if aktModel == "":
+            cbModel['value'] = ["Linear", "Lasso", "Ridge", "Random Forest"]
+        aktModel = cbModel.get()
+        dm.teachModel(aktModel)
+        trainScore.set("Ucz: "+str(dm.getModelEvalTrain()))
+        testScore.set("Test: " + str(dm.getModelEvalTest()))
+'''
+
+
+
+
+
+        #this.dane = this.dane.drop(this.dane[this.dane['cores'] == ""].index)
+        #this.dane = this.dane.drop(this.dane[this.dane['threads'] == ""].index)
+        #this.dane.dropna()
+
+
+
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('GEFORCE', 'GeForce')
+        
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('Iris Xe Graphics', 'Iris Xe')
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('Integrated Iris', 'Iris')
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('UHD Graphics', 'UHD')
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('Integrated UHD', 'UHD')
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('Integrated Integrated', 'Integrated Graphics')
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('Intel Graphics', 'Intel Integrated Graphics')
+        #this.dane['GPU'] = this.dane['GPU'].str.replace('Intel Integrated Graphics ', 'Intel Integrated Graphics')
+        #dane['GPU'] = dane['GPU'].str.replace('Intel Integrated', 'Intel Integrated Graphics')
+
+
+
+
+
+
+                #paaa = []
+                            #print(type(this.dane.iloc[j, :]))
+                    #paaa.append(this.dane.iloc[j, i])
+                    #if prms.loc[0, i] != "n/a":
+                    #    paaa.append(prms.loc[0, i])
+                    #elif this.dane.shape[0] != 0:
+
+                    #else:
+                    #    if(i == 'price'):
+                    #        paaa.append(this.dane[i].mean())
+                    #    elif this.dane[i].mode().shape[0] != 0:
+                    #        paaa.append(this.dane[i].mode()[0])
+                    #    else:
+                    #        paaa.append(this.baseline.loc[0, i])
+
+
+
+
+
+
+
+
+
+
+            print("=="*30)
+            print("\nlack'o'data\n")
+            print("Predictions")
+            print("RFR: ", mean(this.predRfr))
+            print("GradBoost: ", mean(this.predGra))
+
+            print("=="*30)
+            print("Predictions")
+            print("\nno lack'o'data\n")
+            print("Linear: ", mean(this.predLin))
+            print("Lasso: ", mean(this.predLas))
+            print("Ridge: ", mean(this.predRid))
+            print("RFR: ", mean(this.predRfr))
+            print("GradBoost: ", mean(this.predGra))
+
+
+
+    def prepareParams(this, prms):
+        paff = []
+        for i in this.dane.columns:
+            if prms.loc[0, i] != "n/a":
+                if i == 'Ram' or i == 'ROM':
+                    prms[i] = prms[i].astype(int)
+                if i == 'Display':
+                    prms[i] = prms[i].astype(float)
+                this.dane = this.dane[this.dane[i] == prms.loc[0, i]] 
+
+        if this.dane.shape[0] != 0:
+            for i in range(0, this.dane.shape[0]):
+                paff.append(this.dane.iloc[i, :].to_list())
+
+        else:
+            for i in this.dane.columns:
+                if prms.loc[0, i] != "n/a":
+                    paff.append(prms.loc[0, i])
+
+        duma = pd.get_dummies(pd.DataFrame(paff, columns=this.dane.columns))
+
+        pbff = []
+
+        for j in range(0, duma.shape[0]):
+            pbbb = [False for x in this.dum.columns]
+            for k in range(0, duma.shape[1]):
+                for i in range(0, len(pbbb)):
+                    if duma.columns[k] == this.dum.columns[i]:
+                        pbbb[i] = duma.iloc[j, k]
+                        break
+            pbff.append(pbbb)
+
+        return pd.DataFrame(pbff, columns=this.dum.columns)
+
+
+
+
+
+
+
+
+
+
+cbBrand.current(7)
+cbOS.current(10)
+cbWarranty.current(2)
+cbCPUType.current(9)
+cbCores.current(6)
+cbThreads.current(6)
+cbRam.current(3)
+cbRamTypes.current(2)
+cbStorage.current(5)
+cbStorageTypes.current(2)
+cbDisplay.current(11)
+cbResolution.current(3)
+cbGPU.current(1)

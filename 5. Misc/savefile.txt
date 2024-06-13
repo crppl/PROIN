@@ -1,0 +1,91 @@
+import datamod as dm
+import pandas as pd
+from statistics import mean
+
+from tkinter import *
+from tkinter import ttk
+
+dm = dm.DataMod("data.csv")
+
+def makeParams():
+    params = ["none" for x in range(15)]
+    params[3] = "4"
+    params[4] = "DDR4"
+    params2 = pd.DataFrame([params], columns=dm.getData().columns)
+    return params2
+
+def cumbox1(event):
+    if dd1.get() != "none":
+        thread = []
+        nOfCores = int(dd1.get())
+        thread.append("none")
+        for i in thr[1:]:
+            if int(i) >= nOfCores:
+               thread.append(i)
+        dd2['value'] = thread
+    else:
+        dd2['value'] = thr
+
+
+def cumbox2(event):
+    if dd2.get() != "none":
+        core = []
+        nOfThreads = int(dd2.get())
+        core.append("none")
+        for i in cor[1:]:
+            if int(i) <= nOfThreads:
+                core.append(i)
+        dd1['value'] = core
+    else:
+        dd1['value'] = cor
+
+
+
+xx = makeParams()
+
+res = dm.getPrice(xx)
+
+nibba = dm.getData()
+
+nibba = nibba.drop(nibba[nibba['Ram'] != "4"].index)
+nibba = nibba.drop(nibba[nibba['Ram_type'] != "DDR4"].index)
+
+suma2 = mean(nibba['price'])
+
+
+
+root = Tk()
+root.title("Title goes here!")
+root.geometry("1000x800")
+root.minsize(350, 200)
+
+
+# baseline data
+cor = ["none", 2, 3]
+cor = cor.extend(dm.getCPUCores())
+thr = ["none", 2, 3]
+thr = thr.extend(dm.getCPUThreads())
+
+frame = LabelFrame(root, text=res, width=200, height=200)
+frame.pack()#pady=20, padx=60, fill=BOTH, expand=True)
+frame.pack_propagate(False)
+
+#d1 = StringVar()
+#d1.set(cor[1])
+
+dd1 = ttk.Combobox(frame, value=cor)
+dd1['values'] = cor
+dd1.current(1)
+dd1.bind("<<ComboboxSelected>>", cumbox1)
+dd1.pack(padx=10, pady=10)
+
+dd2 = ttk.Combobox(frame, value=thr)
+dd2['values'] = thr
+dd2.current(1)
+dd2.bind("<<ComboboxSelected>>", cumbox2)
+dd2.pack(padx=10, pady=10)
+
+
+
+
+root.mainloop()
